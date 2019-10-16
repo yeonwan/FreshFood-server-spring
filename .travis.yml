@@ -1,0 +1,13 @@
+language: java
+jdk: openjdk8
+
+before_install:
+  - sudo apt-get update
+  - sudo apt install python-pip python-dev
+  - sudo pip install awscli
+
+services:
+  - docker
+
+script:
+  - ./build.sh --ci
