@@ -2,7 +2,7 @@
 
 export LEIN_ROOT=yes
 
-APP_NAME='freshFood-server'
+APP_NAME='freshfood-server'
 CONTAINER="$ECR_PATH/$APP_NAME"
 
 export ANSIBLE_HOST_KEY_CHECKING=false
