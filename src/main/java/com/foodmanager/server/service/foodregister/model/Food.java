@@ -5,6 +5,7 @@ public class Food {
     private String ExpDate;
     private String memo;
     private String createdAt;
+
     public Food(){}
     public Food(String name, String ExpDate, String memo, String createdAt){
         this.name = name.toUpperCase();

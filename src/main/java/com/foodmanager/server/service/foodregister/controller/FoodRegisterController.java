@@ -13,7 +13,7 @@ import java.util.List;
 public class FoodRegisterController {
     @CrossOrigin(origins = "*")
     @RequestMapping("/{UserId}/register")
-    public List<Food> RegisterFood(List<Food> foods){
+    public List<Food> RegisterFood(){
         return Arrays.asList(
                 new Food("onion","2019-12-25","Fucking","2019-10-30"),
                 new Food("beef","2019-12-25","hi","2019-10-30")
