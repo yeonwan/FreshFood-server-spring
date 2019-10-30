@@ -1,12 +1,12 @@
-package com.education.sample.service.sendMessage;
+package com.foodmanager.server.service.foodregister.model;
 
-public class RequestClass {
+public class User {
+    private long userId;
+    private String userName;
 
-    public String userName;
+    public User() {}
 
-    public RequestClass() {}
-
-    public RequestClass(String userName) {
+    public User(long id, String userName) {
         this.userName = userName;
     }
 

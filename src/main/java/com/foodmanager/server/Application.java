@@ -1,4 +1,4 @@
-package com.education.sample;
+package com.foodmanager.server;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

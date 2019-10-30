@@ -1,4 +1,4 @@
-package com.education.sample.service.sendMessage;
+package com.foodmanager.server.service.foodregister.model;
 
 public class ResponseClass {
 
