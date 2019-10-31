@@ -1,6 +1,9 @@
 package com.foodmanager.server.service.foodregister.controller;
 
+import com.foodmanager.server.service.foodregister.Resources.FoodResources;
 import com.foodmanager.server.service.foodregister.model.Food;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -9,16 +12,27 @@ import java.util.List;
 
 @RestController
 public class FoodRegisterController {
+    @Autowired
+    private FoodResources foodResources;
+
     @CrossOrigin(origins = "*")
-    @RequestMapping("/{UserId}/register")
-    public List<Food> RegisterFood(){
-        return Arrays.asList(
-                new Food("onion","2019-12-25","Fucking","2019-10-30"),
-                new Food("beef","2019-12-25","hi","2019-10-30")
-                );
+    @GetMapping("{UserId}/findAll")
+    public Map<Long, Food> findAllFood(){
+        return foodResources.findAll();
     }
-    @RequestMapping("/register/{UserId}")
-    public Food Register(@PathVariable String UserId){
-        return new Food("onion", "2019-12-25",UserId + "의 음식","2019-10-30" );
+
+    @GetMapping("{UserId}/findById")
+    public Food findById(@PathVariable int UserId){
+        return foodResources.findById(UserId);
+    }
+
+    @PostMapping("/{UserId}/register")
+    public Food register(@PathVariable long UserId, @RequestBody Food food){
+        return foodResources.register(UserId, food);
+    }
+
+    @DeleteMapping("/{UserId}/deleteById")
+    public Food delete(@PathVariable long UserId){
+        return foodResources.deleteById(UserId);
     }
 }
