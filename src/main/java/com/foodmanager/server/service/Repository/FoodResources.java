@@ -1,11 +1,8 @@
-package com.foodmanager.server.service.foodregister.Resources;
+package com.foodmanager.server.service.Repository;
 
-import com.foodmanager.server.service.foodregister.model.Food;
-import org.springframework.context.annotation.Bean;
+import com.foodmanager.server.service.model.Food;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 

@@ -1,6 +1,6 @@
 package com.foodmanager.server;
 
-import com.foodmanager.server.service.foodregister.Resources.FoodResources;
+import com.foodmanager.server.service.Repository.FoodResources;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -15,4 +15,5 @@ public class Application {
     public FoodResources getFoodResources(){
         return new FoodResources();
     }
+
 }

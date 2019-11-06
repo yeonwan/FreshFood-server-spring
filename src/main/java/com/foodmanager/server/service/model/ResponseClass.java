@@ -1,4 +1,4 @@
-package com.foodmanager.server.service.foodregister.model;
+package com.foodmanager.server.service.model;
 
 public class ResponseClass {
 

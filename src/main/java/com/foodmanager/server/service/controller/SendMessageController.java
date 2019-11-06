@@ -1,7 +1,7 @@
-package com.foodmanager.server.service.foodregister.controller;
+package com.foodmanager.server.service.controller;
 
-import com.foodmanager.server.service.foodregister.model.ResponseClass;
-import com.foodmanager.server.service.foodregister.model.User;
+import com.foodmanager.server.service.model.ResponseClass;
+import com.foodmanager.server.service.model.User;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
