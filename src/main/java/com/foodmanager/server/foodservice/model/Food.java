@@ -8,16 +8,7 @@ public class Food {
     private String uri;
     private  String category;
 
-
     public Food(){}
-    public Food(String name, String ExpDate, String memo, String uri, String category, int id){
-        this.id = id;
-        this.name = name.toLowerCase();
-        this.expDate = ExpDate;
-        this.memo = memo;
-        this.uri = uri;
-        this.category= category;
-    }
 
     public int getId() {
         return id;
@@ -44,7 +35,7 @@ public class Food {
     public void setUrl(String url) { this.uri = uri; }
 
     public void setExpDate(String expDate) {
-        expDate = expDate;
+        this.expDate = expDate;
     }
 
     public void setMemo(String memo) {
