@@ -21,7 +21,7 @@ public class DBRepository {
     public Food addFoodToRefri(int UserId, Food food){
         jdbcTemplate.execute(String.format("INSERT INTO Refri" +
                         "(User_ID, Food_ID, Exdate, Memo, Category, Uri)" +
-                        " VALUES(%d, %d, %s, %s, %s, %s)",
+                        " VALUES(%d, %d, \"%s\", \"%s\", \"%s\", \"%s\")",
                 UserId, food.getId(), food.getExpDate(),food.getMemo(),food.getCategory(), food.getUrl()));
         return food;
     }

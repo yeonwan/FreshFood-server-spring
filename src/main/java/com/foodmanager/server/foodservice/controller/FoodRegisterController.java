@@ -36,7 +36,7 @@ public class FoodRegisterController {
 
     @PostMapping("/{UserId}/register")
     public ResponseEntity <Food> register(@PathVariable int UserId, @RequestBody Food food){
-        System.out.println(food.getExpDate());
+            System.out.println(food.getExpDate());
         return new ResponseEntity<>(dbRepository.addFoodToRefri(UserId, food), HttpStatus.OK);
     }
 
