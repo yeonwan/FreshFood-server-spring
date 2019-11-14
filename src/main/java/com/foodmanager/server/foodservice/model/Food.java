@@ -1,21 +1,21 @@
-package com.foodmanager.server.service.model;
+package com.foodmanager.server.foodservice.model;
 
 public class Food {
     private int id;
     private String name;
     private String expDate;
     private String memo;
-    private String url;
+    private String uri;
     private  String category;
     private  String exDate;
 
     public Food(){}
-    public Food(String name, String ExpDate, String memo, String url, String category, int id){
+    public Food(String name, String ExpDate, String memo, String uri, String category, int id){
         this.id = id;
         this.name = name.toLowerCase();
         this.expDate = ExpDate;
         this.memo = memo;
-        this.url = url;
+        this.uri = uri;
         this.category= category;
     }
 
@@ -31,7 +31,7 @@ public class Food {
         return exDate;
     }
 
-    public String getUrl(){return url;}
+    public String getUrl(){return uri;}
 
     public String getExpDate() {
         return expDate;
@@ -45,7 +45,7 @@ public class Food {
         return memo;
     }
 
-    public void setUrl(String url) { this.url = url; }
+    public void setUrl(String url) { this.uri = uri; }
 
     public void setExpDate(String expDate) {
         expDate = expDate;

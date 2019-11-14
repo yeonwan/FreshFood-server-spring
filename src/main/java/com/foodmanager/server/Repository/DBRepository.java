@@ -1,11 +1,10 @@
-package com.foodmanager.server.service.Repository;
+package com.foodmanager.server.Repository;
 
-import com.foodmanager.server.service.model.Food;
+import com.foodmanager.server.foodservice.model.Food;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import javax.validation.constraints.Null;
 import java.util.ArrayList;
 import java.util.List;
 

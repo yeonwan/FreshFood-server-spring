@@ -1,4 +1,4 @@
-package com.foodmanager.server.service.configure;
+package com.foodmanager.server.configure;
 
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;

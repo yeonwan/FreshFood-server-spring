@@ -1,11 +1,13 @@
-package com.foodmanager.server.service.controller;
+package com.foodmanager.server.foodservice.controller;
 
-import com.foodmanager.server.service.Repository.DBRepository; // Data access object
-import com.foodmanager.server.service.model.Food;
+import com.foodmanager.server.Repository.DBRepository; // Data access object
+import com.foodmanager.server.foodservice.model.Food;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.util.*;
 
 @RestController
@@ -33,7 +35,7 @@ public class FoodRegisterController {
 
     @PostMapping("/{UserId}/register")
     public ResponseEntity <Food> register(@PathVariable int UserId, @RequestBody Food food){
-        food.setId(dbRepository.findFoodId(food.getName()));
+        food.setId(0);
         return new ResponseEntity<>(dbRepository.addFoodToRefri(UserId, food), HttpStatus.OK);
     }
 
