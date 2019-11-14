@@ -3,17 +3,17 @@ package com.foodmanager.server.service.model;
 public class Food {
     private int id;
     private String name;
-    private String ExpDate;
+    private String expDate;
     private String memo;
     private String url;
     private  String category;
-    private  String ExDate;
+    private  String exDate;
 
     public Food(){}
     public Food(String name, String ExpDate, String memo, String url, String category, int id){
         this.id = id;
         this.name = name.toLowerCase();
-        this.ExpDate = ExpDate;
+        this.expDate = ExpDate;
         this.memo = memo;
         this.url = url;
         this.category= category;
@@ -28,13 +28,13 @@ public class Food {
     }
 
     public String getExDate() {
-        return ExDate;
+        return exDate;
     }
 
     public String getUrl(){return url;}
 
     public String getExpDate() {
-        return ExpDate;
+        return expDate;
     }
 
     public String getName() {
@@ -48,7 +48,7 @@ public class Food {
     public void setUrl(String url) { this.url = url; }
 
     public void setExpDate(String expDate) {
-        ExpDate = expDate;
+        expDate = expDate;
     }
 
     public void setMemo(String memo) {
