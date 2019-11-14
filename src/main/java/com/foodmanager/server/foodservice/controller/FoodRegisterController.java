@@ -12,6 +12,7 @@ import java.util.*;
 
 @RestController
 public class FoodRegisterController {
+    private static Logger logger = LoggerFactory.getLogger(FoodRegisterController.class);
     @Autowired
     private DBRepository dbRepository;
 
@@ -35,7 +36,7 @@ public class FoodRegisterController {
 
     @PostMapping("/{UserId}/register")
     public ResponseEntity <Food> register(@PathVariable int UserId, @RequestBody Food food){
-        food.setId(0);
+        System.out.println(food.getExpDate());
         return new ResponseEntity<>(dbRepository.addFoodToRefri(UserId, food), HttpStatus.OK);
     }
 

@@ -7,7 +7,7 @@ public class Food {
     private String memo;
     private String uri;
     private  String category;
-    private  String exDate;
+
 
     public Food(){}
     public Food(String name, String ExpDate, String memo, String uri, String category, int id){
@@ -25,10 +25,6 @@ public class Food {
 
     public String getCategory() {
         return category;
-    }
-
-    public String getExDate() {
-        return exDate;
     }
 
     public String getUrl(){return uri;}
