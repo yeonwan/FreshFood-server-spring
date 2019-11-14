@@ -14,7 +14,7 @@ public class DBConfig {
         dataSourceBuilder.username("admin");
         dataSourceBuilder.password("freshfood");
         dataSourceBuilder.url(
-                "jdbc:mysql://fm-db-cluster.cluster-cury5e9pcojj.ap-northeast-2.rds.amazonaws.com:3306/FFcompany");
+                "jdbc:mysql://fm-db-cluster.cluster-cury5e9pcojj.ap-northeast-2.rds.amazonaws.com:3306/FreshFood");
         dataSourceBuilder.driverClassName("com.mysql.cj.jdbc.Driver");
         return dataSourceBuilder.build();
     }
