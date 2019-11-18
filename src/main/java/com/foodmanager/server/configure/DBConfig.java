@@ -11,10 +11,10 @@ public class DBConfig {
     @Bean
     public DataSource getDataSource(){
         DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
-        dataSourceBuilder.username("admin");
-        dataSourceBuilder.password("freshfood");
+        dataSourceBuilder.username("team_one");
+        dataSourceBuilder.password("team_one_password");
         dataSourceBuilder.url(
-                "jdbc:mysql://fm-db-cluster.cluster-cury5e9pcojj.ap-northeast-2.rds.amazonaws.com:3306/FreshFood");
+                "jdbc:mysql://yonsei-aurora-primary-instance-1.cury5e9pcojj.ap-northeast-2.rds.amazonaws.com:3306/team_one");
         dataSourceBuilder.driverClassName("com.mysql.cj.jdbc.Driver");
         return dataSourceBuilder.build();
     }

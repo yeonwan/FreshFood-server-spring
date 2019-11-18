@@ -1,4 +1,5 @@
-package com.foodmanager.server.foodservice.model;
+package com.foodmanager.server.model;
+
 
 public class Food {
     private int id;

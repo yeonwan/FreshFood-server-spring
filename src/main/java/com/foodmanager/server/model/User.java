@@ -1,4 +1,4 @@
-package com.foodmanager.server.foodservice.model;
+package com.foodmanager.server.model;
 
 public class User {
     private long userId;
