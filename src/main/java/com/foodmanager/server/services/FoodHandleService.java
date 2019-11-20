@@ -1,9 +1,6 @@
 package com.foodmanager.server.services;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.foodmanager.server.configure.S3Config;
 import com.foodmanager.server.model.Food;
 import org.slf4j.Logger;
@@ -13,25 +10,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import com.foodmanager.server.repository.DBRepository;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
-
 
 @Service
 public class FoodHandleService {
     private Logger logger = LoggerFactory.getLogger(FoodHandleService.class);
     @Autowired
     private DBRepository dbRepository;
-    @Autowired
-    private S3Config s3Config;
-    @Autowired
-    private AmazonS3 amazonS3;
 
     public ResponseEntity addFoodToRefri(long UserId, Food food){
+        food.setUrl("");
         String sql = String.format("INSERT INTO Refri" +
                         "(User_ID, Food_ID, Exdate, Memo, Category, Uri)" +
                         " VALUES(%d, %d, \"%s\", \"%s\", \"%s\", \"%s\")",

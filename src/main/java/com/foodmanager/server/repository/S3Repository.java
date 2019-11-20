@@ -27,6 +27,8 @@ public class S3Repository {
         try{
             ObjectMetadata metadata = new ObjectMetadata();
             metadata.setContentLength(bytes.length);
+            logger.info(bucket);
+            logger.info(folder+"/"+id);
             PutObjectRequest putObjectRequest =
                     new PutObjectRequest(bucket, folder+"/"+id, new ByteArrayInputStream(bytes), metadata);
             putObjectRequest.setCannedAcl(CannedAccessControlList.PublicRead);

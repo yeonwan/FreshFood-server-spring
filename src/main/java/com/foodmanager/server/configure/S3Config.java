@@ -16,19 +16,16 @@ public class S3Config{
     private String secretKey;
     private String region;
     public S3Config(){
-        accessKey = "AKIAXXPRRAWGDRB7YJNE";
-        secretKey = "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";
+        accessKey = System.getenv("AWS_ACCESS_KEY_ID");
+        secretKey = System.getenv("AWS_SECRET_ACCESS_KEY");
         region = "ap-northeast-2";
     }
+
     @Bean
     public AmazonS3 amazonS3Client(){
         return AmazonS3ClientBuilder.standard()
                 .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey)))
                 .withRegion(Regions.fromName(region))
                 .build();
-    }
-
-    public String getRegion() {
-        return region;
     }
 }

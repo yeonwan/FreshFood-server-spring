@@ -11,8 +11,8 @@ public class DBConfig {
     @Bean
     public DataSource getDataSource(){
         DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
-        dataSourceBuilder.username("team_one");
-        dataSourceBuilder.password("team_one_password");
+        dataSourceBuilder.username(System.getenv("DB_ID"));
+        dataSourceBuilder.password(System.getenv("DB_PASSWORD"));
         dataSourceBuilder.url(
                 "jdbc:mysql://yonsei-aurora-primary-instance-1.cury5e9pcojj.ap-northeast-2.rds.amazonaws.com:3306/team_one");
         dataSourceBuilder.driverClassName("com.mysql.cj.jdbc.Driver");
