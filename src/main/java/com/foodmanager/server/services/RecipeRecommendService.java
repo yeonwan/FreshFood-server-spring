@@ -1,7 +1,7 @@
 package com.foodmanager.server.services;
 
-import com.foodmanager.server.model.Recipe;
 import com.foodmanager.server.utils.RestTemplateUtils;
+import org.jetbrains.annotations.NotNull;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -9,16 +9,15 @@ import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.ArrayList;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
+
 
 @Service
 @Slf4j
@@ -28,38 +27,95 @@ public class RecipeRecommendService {
     @Autowired
     private FoodHandleService foodHandleService;
 
-    public Recipe getAll() {
+    @Autowired
+    @Qualifier("fixedThreadPool")
+    private ExecutorService fixedThreadPool;
+
+    @Autowired
+    @Qualifier("cachedThreadPool")
+    private ExecutorService cachedThreadPool;
+
+    public CompletableFuture<ResponseEntity<JSONArray>> searchByName(String words) throws ParseException {
         String url = "test/recipe/_search";
-        return (Recipe) RestTemplateUtils.getJsonForObject(Uri + url, Recipe.class);
+        return CompletableFuture.supplyAsync(()-> {
+            try {
+                return searchQuery(words);
+            } catch (ParseException e) {
+                e.printStackTrace();
+                return null;
+            } }, fixedThreadPool)
+                .thenApplyAsync((query) -> {
+                    try {
+                        return RestTemplateUtils.postResponseEntity(Uri+url , query);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                        return null;
+                    }
+                }, cachedThreadPool)
+                .thenApplyAsync((responseEntity)->{
+                    try {
+                        JSONParser jsonParser = new JSONParser();
+                        JSONObject jsonObject =
+                                (JSONObject) jsonParser.parse(Objects.requireNonNull(responseEntity.getBody()));
+                        JSONObject hits = (JSONObject) jsonObject.get("hits");
+                        return new ResponseEntity<>((JSONArray)hits.get("hits"),HttpStatus.OK);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    return new ResponseEntity<JSONArray>(HttpStatus.BAD_REQUEST);
+                },fixedThreadPool);
     }
 
-    public ResponseEntity<String> getIth(long i) throws ParseException {
-        String url = "test/recipe/"+i;
-        return RestTemplateUtils.getResponseEntity(Uri + url);
-    }
-
-    public ResponseEntity<JSONArray> getTop10(long UserId, int size) throws ParseException{
+    public CompletableFuture<ResponseEntity<JSONArray>> getTopN(long UserId, int size) throws ParseException{
         String url = "test/recipe/_search";
-        ArrayList<String> arr = new ArrayList<>();
-        arr.add("삼겹살");
-        arr.add("소고기");
-        arr.add("당근");
-        String sources = "\""+arr.toString() +"\"";
-                //Objects.requireNonNull(foodHandleService.getAllFood(UserId).getBody()).toString();
-        ResponseEntity<String> responseEntity =
-                RestTemplateUtils.postResponseEntity(Uri+url, makeQuery(sources, 10));
-        JSONParser jsonParser = new JSONParser();
-        JSONObject jsonObject = (JSONObject)
-                jsonParser.parse(Objects.requireNonNull(responseEntity.getBody()));
-        JSONObject hits = (JSONObject) jsonObject.get("hits");
-        JSONArray recipes = (JSONArray) hits.get("hits");
-        return new ResponseEntity<>(recipes, HttpStatus.OK);
+        //"\"양파, 삼겹살, 햄, 김, 김치\""
+        return CompletableFuture.supplyAsync(() -> (getUserFood(UserId)), cachedThreadPool)
+                .thenApplyAsync((sources)-> {
+                    try {
+                        return recommendQuery(sources, size);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                        return null;
+                    }
+                }, fixedThreadPool)
+                .thenApplyAsync((query) -> {
+                    try {
+                        return RestTemplateUtils.postResponseEntity(Uri+url , query);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                        return null;
+                    }
+                }, cachedThreadPool)
+                .thenApplyAsync((responseEntity)->{
+                    try {
+                        JSONParser jsonParser = new JSONParser();
+                        JSONObject jsonObject =
+                                (JSONObject) jsonParser.parse(Objects.requireNonNull(responseEntity.getBody()));
+                        JSONObject hits = (JSONObject) jsonObject.get("hits");
+                        return new ResponseEntity<>((JSONArray)hits.get("hits"),HttpStatus.OK);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    return new ResponseEntity<JSONArray>(HttpStatus.BAD_REQUEST);
+                }, fixedThreadPool);
     }
 
-    private String makeQuery(String sources, int size) throws ParseException {
-        return String.format("{\"query\": {\"function_score\": {\"query\": {\"multi_match\": {\"query\":%s,\"fields\": " +
-                "[\"재료.식자재명\",\"제목^0.5\"] }}, \"random_score\": {\"field\": \"_seq_no\"} } }, \"size\": \"%d\"" +
+    private String recommendQuery(String sources, int size) throws ParseException {
+        if(sources.equals("\"[]\"")) return String.format("{\"query\": {\"function_score\": { \"random_score\": {\"field\": \"_seq_no\"} } }, \"size\": %d" +
+                    "}",size);
+        else return String.format("{\"query\": {\"function_score\": {\"query\": {\"multi_match\": {\"query\":%s,\"fields\": " +
+                "[\"재료.식자재명\",\"제목^0.5\"] }}, \"random_score\": {\"field\": \"_seq_no\"} } }, \"size\": %d" +
                 "}", sources,size);
     }
 
+    private String searchQuery(String words) throws ParseException {
+        return String.format("{\"query\": {\"function_score\": {\"query\": {\"multi_match\": {\"query\":%s,\"fields\": " +
+                "[\"재료.식자재명\",\"제목^0.5\"] }}, \"random_score\": {\"field\": \"_seq_no\"} } }, \"size\": 20" +
+                "}", words);
+    }
+
+    @NotNull
+    private String getUserFood(long UserId) {
+        return "\"" + Objects.requireNonNull(foodHandleService.getAllFoodByUserId(UserId).getBody()).toString() + "\"";
+    }
 }

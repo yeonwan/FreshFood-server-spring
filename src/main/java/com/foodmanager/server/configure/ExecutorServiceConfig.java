@@ -10,7 +10,7 @@ import java.util.concurrent.Executors;
 @Configuration
 public class ExecutorServiceConfig {
 
-    @Bean("fixedThreadPool")
+    @Bean("fixedThreadPool") // for CPU bound
     public ExecutorService fixedThreadPool() {
         return Executors.newFixedThreadPool(5);
     }
@@ -20,10 +20,8 @@ public class ExecutorServiceConfig {
         return Executors.newSingleThreadExecutor();
     }
 
-    @Bean("cachedThreadPool")
+    @Bean("cachedThreadPool") //for IO bound
     public ExecutorService cachedThreadPool() {
-
-       //CompletableFuture<String > s = CompletableFuture.supplyAsync(()->"hi");
         return Executors.newCachedThreadPool();
     }
 }

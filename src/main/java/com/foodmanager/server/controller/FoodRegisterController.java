@@ -5,39 +5,38 @@ import com.foodmanager.server.services.FoodHandleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 
 @RestController
 public class FoodRegisterController {
-
     @Autowired
-    private FoodHandleService foodRegisterService;
+    private FoodHandleService foodHandleService;
 
     @CrossOrigin(origins = "*")
     @GetMapping("food/{UserId}/findAll")
-    public Flux<Food> findAllFood(@PathVariable long UserId){
-        return foodRegisterService.getAllFood(UserId);
+    public ResponseEntity<?> findAllFood(@PathVariable long UserId){
+        return foodHandleService.getAllFoodByUserId(UserId);
     }
 
     @PostMapping("food/{UserId}/register")
-    public ResponseEntity register(@PathVariable long UserId, @RequestBody Food food){
-        return foodRegisterService.addFoodToRefri(UserId, food);
+    public ResponseEntity<?> register(@PathVariable long UserId, @RequestBody Food food){
+        return foodHandleService.addFoodToRefri(UserId, food);
     }
 
     @DeleteMapping("food/{UserId}/deleteById={FoodId}")
     public ResponseEntity delete(@PathVariable long UserId, @PathVariable long FoodId){
-        return foodRegisterService.DeleteById(UserId,FoodId);
+        return foodHandleService.DeleteById(UserId,FoodId);
     }
 
     @DeleteMapping("food/{UserId}/deleteAll")
     public ResponseEntity deleteAll(@PathVariable long UserId){
-        return foodRegisterService.DeleteAll(UserId);
+        return foodHandleService.DeleteAll(UserId);
     }
 
     @PostMapping("food/food/register")
     public ResponseEntity register( @RequestBody Food food){
-        return foodRegisterService.addFood(food);
+        return foodHandleService.addFood(food);
     }
 }
