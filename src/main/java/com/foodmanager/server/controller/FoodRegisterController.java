@@ -15,17 +15,17 @@ public class FoodRegisterController {
     private FoodHandleService foodHandleService;
 
     @CrossOrigin(origins = "*")
-    @GetMapping("food/{UserId}/findAll")
+    @GetMapping("{UserId}/findAll/foods")
     public ResponseEntity<?> findAllFood(@PathVariable long UserId){
         return foodHandleService.getAllFoodByUserId(UserId);
     }
 
-    @PostMapping("food/{UserId}/register")
+    @PostMapping("{UserId}/register/foods")
     public ResponseEntity<?> register(@PathVariable long UserId, @RequestBody Food food){
         return foodHandleService.addFoodToRefri(UserId, food);
     }
 
-    @DeleteMapping("food/{UserId}/deleteById={FoodId}")
+    @DeleteMapping("{UserId}/deleteById={FoodId}/foods")
     public ResponseEntity delete(@PathVariable long UserId, @PathVariable long FoodId){
         return foodHandleService.DeleteById(UserId,FoodId);
     }
