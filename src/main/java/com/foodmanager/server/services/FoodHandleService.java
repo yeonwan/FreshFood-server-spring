@@ -1,8 +1,8 @@
 package com.foodmanager.server.services;
 
-import com.amazonaws.services.s3.AmazonS3;
-import com.foodmanager.server.configure.S3Config;
 import com.foodmanager.server.model.Food;
+import com.foodmanager.server.model.FoodMapper;
+import org.jboss.logging.Cause;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.foodmanager.server.repository.DBRepository;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 public class FoodHandleService {
@@ -20,7 +21,9 @@ public class FoodHandleService {
     private DBRepository dbRepository;
 
     public ResponseEntity addFoodToRefri(long UserId, Food food){
-        food.setUrl("");
+        food.setUrl("https://fm-foodpicturebucket.s3.ap-northeast-2.amazonaws.com/foods/"+UserId+"/"+food.getName());
+        food.setId(dbRepository.queryForObject(String.format("SELECT ID FROM Food WHERE Name=\"%s\"",food.getName()),Integer.class));
+        logger.info(String.valueOf(UserId), food);
         String sql = String.format("INSERT INTO Refri" +
                         "(User_ID, Food_ID, Exdate, Memo, Category, Uri)" +
                         " VALUES(%d, %d, \"%s\", \"%s\", \"%s\", \"%s\")",
@@ -48,17 +51,25 @@ public class FoodHandleService {
 
     public ResponseEntity <List<Food>> getAllFoodByUserId(long UserId){
         String sql = "SELECT FooD_ID as food_id, " +
-                "(SELECT Name FROM Food WHERE ID = food_id) AS name, " +
-                "Memo as memo, " +
-                "Category as category, " +
+                "(SELECT Name FROM Food WHERE ID = food_id) AS name, Memo as memo, Category as category, " +
                 "Uri as uri, " +
                 "Exdate as expDate " +
                 "FROM Refri WHERE User_ID =" + UserId;
-        return new ResponseEntity<>(dbRepository.queryForList(sql, Food.class),HttpStatus.OK);
+        return new ResponseEntity<>(dbRepository.queryForClassList(sql, new FoodMapper()),HttpStatus.OK);
+    }
+
+    public ResponseEntity <List<String>> getAllFoodNameByUserId(long UserId){
+        String sql =String.format(
+                "SELECT Name FROM Food WHERE ID = ANY (SELECT FooD_ID FROM Refri WHERE User_ID = %d)",UserId);
+        return new ResponseEntity<>(dbRepository.queryForList(sql, String.class),HttpStatus.OK);
     }
 
     public ResponseEntity addFood(Food food){
-        String sql = String.format("INSERT INTO Food (Name, Term) VALUES(%s, %s)", food.getName(), 0);
+        String sql = String.format("INSERT INTO Food (Name, Term)" +
+                        "SELECT \"%s\", %d FROM Food WHERE NOT EXISTS" +
+                        "(SELECT Name FROM Food WHERE Name = \"%s\") LIMIT 1",
+                food.getName(), 0,food.getName());
+        logger.info(food.getName());
         dbRepository.execute(sql);
         return new ResponseEntity(HttpStatus.OK);
     }

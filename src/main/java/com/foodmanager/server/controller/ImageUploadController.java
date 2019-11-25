@@ -14,7 +14,7 @@ public class ImageUploadController {
     @Autowired
     private ImageHandleService imageHandleService;
 
-    @PostMapping("{UserId}/registerImage/{folder}")
+    @PostMapping("images/registerImage/{folder}/{UserId}")
     public ResponseEntity<?> registerImage(@PathVariable long UserId, @PathVariable String folder, @RequestParam("file") MultipartFile multipartFile) throws IOException {
         return imageHandleService.uploadImageToS3(UserId, multipartFile, folder);
     }

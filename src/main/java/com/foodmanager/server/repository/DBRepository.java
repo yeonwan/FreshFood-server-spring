@@ -2,6 +2,7 @@ package com.foodmanager.server.repository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -20,10 +21,12 @@ public class DBRepository {
         return new ArrayList<T>(jdbcTemplate.queryForList(sql, clazz));
     }
 
+    public <T> List<T> queryForClassList(String sql, RowMapper<T> rowMapper){
+        return new ArrayList<T>(jdbcTemplate.query(sql,rowMapper));
+    }
+
     public void execute(String sql) {
         jdbcTemplate.execute(sql);
     }
-
-
 }
 

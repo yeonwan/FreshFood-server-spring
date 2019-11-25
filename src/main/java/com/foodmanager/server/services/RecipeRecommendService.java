@@ -22,7 +22,7 @@ import java.util.concurrent.ExecutorService;
 @Service
 @Slf4j
 public class RecipeRecommendService {
-    private String Uri = "http://ec2-15-164-218-30.ap-northeast-2.compute.amazonaws.com:9200/";
+    private String Uri = "http://ec2-15-164-215-226.ap-northeast-2.compute.amazonaws.com:9200/recipes/recipe/_search";
     private Logger logger = LoggerFactory.getLogger(RecipeRecommendService.class);
     @Autowired
     private FoodHandleService foodHandleService;
@@ -36,7 +36,6 @@ public class RecipeRecommendService {
     private ExecutorService cachedThreadPool;
 
     public CompletableFuture<ResponseEntity<JSONArray>> searchByName(String words) throws ParseException {
-        String url = "test/recipe/_search";
         return CompletableFuture.supplyAsync(()-> {
             try {
                 return searchQuery(words);
@@ -46,7 +45,7 @@ public class RecipeRecommendService {
             } }, fixedThreadPool)
                 .thenApplyAsync((query) -> {
                     try {
-                        return RestTemplateUtils.postResponseEntity(Uri+url , query);
+                        return RestTemplateUtils.postResponseEntity(Uri , query);
                     } catch (ParseException e) {
                         e.printStackTrace();
                         return null;
@@ -67,8 +66,6 @@ public class RecipeRecommendService {
     }
 
     public CompletableFuture<ResponseEntity<JSONArray>> getTopN(long UserId, int size) throws ParseException{
-        String url = "test/recipe/_search";
-        //"\"양파, 삼겹살, 햄, 김, 김치\""
         return CompletableFuture.supplyAsync(() -> (getUserFood(UserId)), cachedThreadPool)
                 .thenApplyAsync((sources)-> {
                     try {
@@ -80,7 +77,7 @@ public class RecipeRecommendService {
                 }, fixedThreadPool)
                 .thenApplyAsync((query) -> {
                     try {
-                        return RestTemplateUtils.postResponseEntity(Uri+url , query);
+                        return RestTemplateUtils.postResponseEntity(Uri , query);
                     } catch (ParseException e) {
                         e.printStackTrace();
                         return null;
@@ -116,6 +113,9 @@ public class RecipeRecommendService {
 
     @NotNull
     private String getUserFood(long UserId) {
-        return "\"" + Objects.requireNonNull(foodHandleService.getAllFoodByUserId(UserId).getBody()).toString() + "\"";
+        String result =  "\"" + Objects.requireNonNull(foodHandleService.getAllFoodNameByUserId(UserId).getBody())+ "\"";
+        //String result = "\"양파, 삼겹살, 햄, 김, 김치\"";
+        logger.info(result);
+        return  result;
     }
 }

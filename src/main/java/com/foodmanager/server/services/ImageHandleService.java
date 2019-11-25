@@ -25,6 +25,7 @@ public class ImageHandleService {
         assert uploadFileName != null;
         byte[] bytes = image.getBytes();
         String bucket = "fm-foodpicturebucket";
-        return new ResponseEntity<>(s3Repository.uploadImageToS3(bytes, bucket, folder+"/"+UserId, uploadFileName));
+        if(folder.equals("foods")) folder += ("/"+UserId);
+        return new ResponseEntity<>(s3Repository.uploadImageToS3(bytes, bucket, folder, uploadFileName));
     }
 }

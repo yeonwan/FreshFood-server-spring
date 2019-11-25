@@ -14,12 +14,12 @@ public class RecommendController {
     private RecipeRecommendService recipeRecommendService;
 
     @CrossOrigin(origins = "*")
-    @GetMapping("recipe/search/{words}")
+    @GetMapping("recipes/search/{words}")
     public CompletableFuture<ResponseEntity<JSONArray>> getAllRecipe(@PathVariable String words) throws ParseException {
         return recipeRecommendService.searchByName(words);
     }
 
-    @GetMapping("recipe/topN/UserId={i}/size={size}")
+    @GetMapping("recipes/topN/UserId={i}/size={size}")
     public CompletableFuture<ResponseEntity<JSONArray>> getTopN(@PathVariable long i, @PathVariable int size) throws ParseException {
         return recipeRecommendService.getTopN(i, size);
     }
