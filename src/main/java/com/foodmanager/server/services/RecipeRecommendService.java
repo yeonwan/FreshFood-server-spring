@@ -89,7 +89,13 @@ public class RecipeRecommendService {
                         JSONObject jsonObject =
                                 (JSONObject) jsonParser.parse(Objects.requireNonNull(responseEntity.getBody()));
                         JSONObject hits = (JSONObject) jsonObject.get("hits");
-                        return new ResponseEntity<>((JSONArray)hits.get("hits"),HttpStatus.OK);
+                        JSONArray hitss = (JSONArray)hits.get("hits");
+                        JSONArray jsonArray = new JSONArray();
+                        for (Object o : hitss) {
+                            JSONObject tmp = (JSONObject) o;
+                            jsonArray.add(tmp.get("_source"));
+                        }
+                        return new ResponseEntity<>(jsonArray, HttpStatus.OK);
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
