@@ -22,7 +22,7 @@ import java.util.concurrent.ExecutorService;
 @Service
 @Slf4j
 public class RecipeRecommendService {
-    private String Uri = "http://ec2-15-164-215-226.ap-northeast-2.compute.amazonaws.com:9200/recipes/recipe/_search";
+    private String Uri = System.getenv("elasticUrl")+"recipes/recipe/_search";
     private Logger logger = LoggerFactory.getLogger(RecipeRecommendService.class);
     @Autowired
     private FoodHandleService foodHandleService;
