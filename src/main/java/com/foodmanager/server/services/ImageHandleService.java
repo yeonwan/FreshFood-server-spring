@@ -19,8 +19,7 @@ public class ImageHandleService {
     @Autowired
     private S3Repository s3Repository;
 
-    public ResponseEntity<?> uploadImageToS3(long UserId, MultipartFile image, String folder) throws IOException {
-        String uploadFileName= image.getOriginalFilename();
+    public ResponseEntity<?> uploadImageToS3(long UserId, MultipartFile image, String folder, String uploadFileName) throws IOException {
         logger.info(uploadFileName);
         assert uploadFileName != null;
         byte[] bytes = image.getBytes();

@@ -13,12 +13,12 @@ public class FoodRegisterController {
     private FoodHandleService foodHandleService;
 
     @CrossOrigin(origins = "*")
-    @GetMapping("foods/findAll/{UserId}")
+    @GetMapping("foods/findAll/{UserId}") //유저 아이디로 냉장고 안에 그 유저의 음식들 다 가져오기.
     public ResponseEntity<?> findAllFood(@PathVariable long UserId){
         return foodHandleService.getAllFoodByUserId(UserId);
     }
 
-    @PostMapping("foods/register/{UserId}")
+    @PostMapping("foods/register/{UserId}") // 유저아이디로 냉장고 안에 음식 등록
     public ResponseEntity<?> register(@PathVariable long UserId, @RequestBody Food food){
         return foodHandleService.addFoodToRefri(UserId, food);
     }

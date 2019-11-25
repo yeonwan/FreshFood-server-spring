@@ -14,8 +14,9 @@ public class ImageUploadController {
     @Autowired
     private ImageHandleService imageHandleService;
 
-    @PostMapping("images/registerImage/{folder}/{UserId}")
-    public ResponseEntity<?> registerImage(@PathVariable long UserId, @PathVariable String folder, @RequestParam("file") MultipartFile multipartFile) throws IOException {
-        return imageHandleService.uploadImageToS3(UserId, multipartFile, folder);
+    @PostMapping("images/registerImage/{folder}/{UserId}") //folder = foods 입력해주고 UserId 입력해주면 S3에 알맞게 저장
+    public ResponseEntity<?> registerImage(@PathVariable long UserId, @PathVariable String folder,
+                                           @RequestParam("file") MultipartFile multipartFile, @RequestParam("fileName") String fileName) throws IOException {
+        return imageHandleService.uploadImageToS3(UserId, multipartFile, folder, fileName);
     }
 }
