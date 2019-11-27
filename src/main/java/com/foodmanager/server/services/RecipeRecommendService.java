@@ -14,7 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import lombok.extern.slf4j.Slf4j;
-import java.util.Objects;
+
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 
@@ -69,7 +70,8 @@ public class RecipeRecommendService {
         return CompletableFuture.supplyAsync(() -> (getUserFood(UserId)), cachedThreadPool)
                 .thenApplyAsync((sources)-> {
                     try {
-                        return recommendQuery(sources, size);
+
+                        return recommendQuery("\""+sources.toString()+"\"", size);
                     } catch (ParseException e) {
                         e.printStackTrace();
                         return null;
@@ -85,6 +87,8 @@ public class RecipeRecommendService {
                 }, cachedThreadPool)
                 .thenApplyAsync((responseEntity)->{
                     try {
+                        Set<String> hashSet = new HashSet<>(100);
+                        hashSet.addAll(getUserFood(UserId));
                         JSONParser jsonParser = new JSONParser();
                         JSONObject jsonObject =
                                 (JSONObject) jsonParser.parse(Objects.requireNonNull(responseEntity.getBody()));
@@ -93,7 +97,20 @@ public class RecipeRecommendService {
                         JSONArray jsonArray = new JSONArray();
                         for (Object o : hitss) {
                             JSONObject tmp = (JSONObject) o;
-                            jsonArray.add(tmp.get("_source"));
+                            JSONObject recipe = (JSONObject)tmp.get("_source");
+                            JSONArray sources = (JSONArray)recipe.get("재료");
+                            int ctr = 0;
+                            double len = (double)sources.size();
+                            for(Object obj: sources){
+                                JSONObject s = (JSONObject)obj;
+                                String s1 = (s.get("식자재명").toString());
+                                if(hashSet.contains(s1)) {
+                                    s.put("보유", 1); ctr++;
+                                }
+                                else s.put("보유", 0);
+                            }
+                            recipe.put("매치율", ctr/len);
+                            jsonArray.add(recipe);
                         }
                         return new ResponseEntity<>(jsonArray, HttpStatus.OK);
                     } catch (ParseException e) {
@@ -118,10 +135,10 @@ public class RecipeRecommendService {
     }
 
     @NotNull
-    private String getUserFood(long UserId) {
-        String result =  "\"" + Objects.requireNonNull(foodHandleService.getAllFoodNameByUserId(UserId).getBody())+ "\"";
+    private List<String> getUserFood(long UserId) {
+        List<String> result = Objects.requireNonNull(foodHandleService.getAllFoodNameByUserId(UserId).getBody());
         //String result = "\"양파, 삼겹살, 햄, 김, 김치\"";
-        logger.info(result);
-        return  result;
+        logger.info(result.toString());
+        return  new ArrayList<>(result);
     }
 }
