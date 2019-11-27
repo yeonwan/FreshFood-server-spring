@@ -54,7 +54,7 @@ public class FoodHandleService {
                 "(SELECT Name FROM Food WHERE ID = food_id) AS name, Memo as memo, Category as category, " +
                 "Uri as uri, " +
                 "Exdate as expDate " +
-                "FROM Refri WHERE User_ID =" + UserId + "ORDER BY expDate ACS" ;
+                "FROM Refri WHERE User_ID =" + UserId + " ORDER BY expDate ACS" ;
         return new ResponseEntity<>(dbRepository.queryForClassList(sql, new FoodMapper()),HttpStatus.OK);
     }
 
