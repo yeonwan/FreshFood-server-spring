@@ -23,14 +23,14 @@ public class FoodRegisterController {
         return foodHandleService.addFoodToRefri(UserId, food);
     }
 
-    @DeleteMapping("foods/{UserId}/deleteById={FoodId}")
-    public ResponseEntity delete(@PathVariable long UserId, @PathVariable long FoodId){
-        return foodHandleService.DeleteById(UserId,FoodId);
-    }
-
     @DeleteMapping("foods/deleteAll/{UserId}")
     public ResponseEntity deleteAll(@PathVariable long UserId){
         return foodHandleService.DeleteAll(UserId);
+    }
+
+    @DeleteMapping("foods/deleteById/{UserId}/{FoodName}")
+    public ResponseEntity deleteById(@PathVariable long UserId, @PathVariable String FoodName){
+        return foodHandleService.DeleteById(UserId,FoodName);
     }
 
     @PutMapping("foods/registerFood")

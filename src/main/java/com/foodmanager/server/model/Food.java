@@ -33,7 +33,7 @@ public class Food {
         return memo;
     }
 
-    public void setUrl(String url) { this.uri = uri; }
+    public void setUrl(String url) { this.uri = url; }
 
     public void setExpDate(String expDate) {
         this.expDate = expDate;

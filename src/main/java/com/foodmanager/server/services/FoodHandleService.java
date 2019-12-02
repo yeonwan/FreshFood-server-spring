@@ -1,8 +1,8 @@
 package com.foodmanager.server.services;
 
+import com.amazonaws.services.xray.model.Http;
 import com.foodmanager.server.model.Food;
 import com.foodmanager.server.model.FoodMapper;
-import org.jboss.logging.Cause;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import com.foodmanager.server.repository.DBRepository;
 
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
+
 
 @Service
 public class FoodHandleService {
@@ -22,7 +22,11 @@ public class FoodHandleService {
 
     public ResponseEntity addFoodToRefri(long UserId, Food food){
         food.setUrl("https://fm-foodpicturebucket.s3.ap-northeast-2.amazonaws.com/foods/"+UserId+"/"+food.getName());
-        food.setId(dbRepository.queryForObject(String.format("SELECT ID FROM Food WHERE Name=\"%s\"",food.getName()),Integer.class));
+        try {
+            food.setId(dbRepository.queryForObject(String.format("SELECT ID FROM Food WHERE Name=\"%s\"", food.getName()), Integer.class));
+        }catch (Exception ignored){
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
         logger.info(String.valueOf(UserId), food);
         String sql = String.format("INSERT INTO Refri" +
                         "(User_ID, Food_ID, Exdate, Memo, Category, Uri)" +
@@ -32,21 +36,22 @@ public class FoodHandleService {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    public ResponseEntity DeleteById(long UserId, long FoodId){
-        String sql = "";
+    public ResponseEntity DeleteById(long UserId, String FoodName){
+        String sql = String.format("DELETE FROM Refri WHERE User_ID = %d AND Food_ID = %d",
+                UserId, findFoodId(FoodName));
         dbRepository.execute(sql);
         return new ResponseEntity(HttpStatus.OK);
     }
 
     public ResponseEntity DeleteAll(long UserId){
-        String  sql = "";
+        String  sql = "DELETE FROM Refri WHERE User_ID = "+UserId;
         dbRepository.execute(sql);
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    public ResponseEntity<Integer> findFoodId(String fName){
+    private int findFoodId(String fName){
         String sql = String.format("SELECT Name FROM Food WHERE ID = \"%s\"", fName);
-        return new ResponseEntity<Integer>(dbRepository.queryForObject(sql, Integer.class), HttpStatus.OK);
+        return dbRepository.queryForObject(sql, Integer.class);
     }
 
     public ResponseEntity <List<Food>> getAllFoodByUserId(long UserId){

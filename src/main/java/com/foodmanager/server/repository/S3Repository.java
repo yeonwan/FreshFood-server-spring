@@ -2,9 +2,7 @@ package com.foodmanager.server.repository;
 
 import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.*;
 import com.foodmanager.server.services.ImageHandleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,5 +36,21 @@ public class S3Repository {
             e.printStackTrace();
             return HttpStatus.EXPECTATION_FAILED;
         }
+    }
+
+    @Async
+    public  HttpStatus deleteImageFromS3(String bucket, String folder, String fileName){
+        DeleteObjectRequest deleteObjectRequest =
+                new DeleteObjectRequest(bucket, folder +"/" + fileName);
+        amazonS3.deleteObject(deleteObjectRequest);
+        return  HttpStatus.OK;
+    }
+
+    @Async
+    public  HttpStatus deleteImageFolderFromS3(String bucket, String folder){
+        DeleteObjectRequest deleteObjectRequest =
+                new DeleteObjectRequest(bucket,folder);
+        amazonS3.deleteObject(deleteObjectRequest);
+        return  HttpStatus.OK;
     }
 }

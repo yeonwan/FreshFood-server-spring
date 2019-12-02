@@ -27,4 +27,16 @@ public class ImageHandleService {
         if(folder.equals("foods")) folder += ("/"+UserId);
         return new ResponseEntity<>(s3Repository.uploadImageToS3(bytes, bucket, folder, uploadFileName));
     }
+
+    public ResponseEntity<?> deleteImageFromS3(long UserId, String folder, String deleteFileName) throws IOException {
+        if(folder.equals("foods")) folder += ("/"+UserId);
+        String bucket = "fm-foodpicturebucket";
+        return new ResponseEntity<>(s3Repository.deleteImageFromS3( bucket, folder, deleteFileName));
+    }
+
+    public ResponseEntity<?> deleteImageFolderFromS3(long UserId, String folder) throws IOException {
+        if(folder.equals("foods")) folder += ("/"+UserId);
+        String bucket = "fm-foodpicturebucket";
+        return new ResponseEntity<>(s3Repository.deleteImageFolderFromS3( bucket, folder));
+    }
 }
