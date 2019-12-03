@@ -9,7 +9,7 @@ public class FoodMapper implements RowMapper<Food> {
         Food food = new Food();
         food.setId(rs.getInt("food_id"));
         food.setName(rs.getString("name"));
-        food.setUrl(rs.getString("uri"));
+        food.setUri(rs.getString("uri"));
         food.setCategory(rs.getString("category"));
         food.setExpDate(rs.getString("expDate"));
         food.setMemo(rs.getString("memo"));

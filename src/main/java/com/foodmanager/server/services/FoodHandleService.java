@@ -21,7 +21,7 @@ public class FoodHandleService {
     private DBRepository dbRepository;
 
     public ResponseEntity addFoodToRefri(long UserId, Food food){
-        food.setUrl("https://fm-foodpicturebucket.s3.ap-northeast-2.amazonaws.com/foods/"+UserId+"/"+food.getName());
+        food.setUri("https://fm-foodpicturebucket.s3.ap-northeast-2.amazonaws.com/foods/"+UserId+"/"+food.getName());
         try {
             food.setId(dbRepository.queryForObject(String.format("SELECT ID FROM Food WHERE Name=\"%s\"", food.getName()), Integer.class));
         }catch (Exception ignored){
@@ -31,7 +31,7 @@ public class FoodHandleService {
         String sql = String.format("INSERT INTO Refri" +
                         "(User_ID, Food_ID, Exdate, Memo, Category, Uri)" +
                         " VALUES(%d, %d, \"%s\", \"%s\", \"%s\", \"%s\")",
-                UserId, food.getId(), food.getExpDate(), food.getMemo(), food.getCategory(), food.getUrl());
+                UserId, food.getId(), food.getExpDate(), food.getMemo(), food.getCategory(), food.getUri());
         dbRepository.execute(sql);
         return new ResponseEntity(HttpStatus.OK);
     }

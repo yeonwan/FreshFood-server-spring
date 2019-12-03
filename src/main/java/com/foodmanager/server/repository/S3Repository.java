@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.List;
 
 @Repository
 public class S3Repository {
@@ -48,9 +49,15 @@ public class S3Repository {
 
     @Async
     public  HttpStatus deleteImageFolderFromS3(String bucket, String folder){
-        DeleteObjectRequest deleteObjectRequest =
-                new DeleteObjectRequest(bucket,folder);
-        amazonS3.deleteObject(deleteObjectRequest);
+        ObjectListing objectList = amazonS3.listObjects( bucket, folder );
+        List<S3ObjectSummary> objectSummeryList =  objectList.getObjectSummaries();
+        String[] keysList = new String[ objectSummeryList.size() ];
+        int count = 0;
+        for( S3ObjectSummary summery : objectSummeryList ) {
+            keysList[count++] = summery.getKey();
+        }
+        DeleteObjectsRequest deleteObjectsRequest = new DeleteObjectsRequest( bucket).withKeys( keysList );
+        amazonS3.deleteObjects(deleteObjectsRequest);
         return  HttpStatus.OK;
     }
 }

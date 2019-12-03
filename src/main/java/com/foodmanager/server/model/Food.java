@@ -1,6 +1,8 @@
 package com.foodmanager.server.model;
 
 
+import org.jetbrains.annotations.Contract;
+
 public class Food {
     private int id;
     private String name;
@@ -9,6 +11,7 @@ public class Food {
     private String uri;
     private  String category;
 
+    @Contract(pure = true)
     public Food(){}
 
     public int getId() {
@@ -19,7 +22,9 @@ public class Food {
         return category;
     }
 
-    public String getUrl(){return uri;}
+    public String getUri(){
+        return uri;
+    }
 
     public String getExpDate() {
         return expDate;
@@ -33,7 +38,7 @@ public class Food {
         return memo;
     }
 
-    public void setUrl(String url) { this.uri = url; }
+    public void setUri(String uri) { this.uri = uri; }
 
     public void setExpDate(String expDate) {
         this.expDate = expDate;
