@@ -20,8 +20,8 @@ public class ImageUploadController {
         return imageHandleService.uploadImageToS3(UserId, multipartFile, folder, fileName);
     }
 
-    @DeleteMapping("images/deleteImage/{folder}/{UserId}/{fileName}")
-    public ResponseEntity<?> deleteImage(@PathVariable long UserId, @PathVariable String folder, @PathVariable String fileName) throws IOException {
+    @DeleteMapping("images/deleteImage/{folder}/{UserId}")
+    public ResponseEntity<?> deleteImage(@PathVariable long UserId, @PathVariable String folder, @RequestParam("fileName") String fileName) throws IOException {
         return imageHandleService.deleteImageFromS3(UserId, folder, fileName);
     }
 
