@@ -21,7 +21,9 @@ public class FoodHandleService {
     private DBRepository dbRepository;
 
     public ResponseEntity addFoodToRefri(long UserId, Food food){
-        food.setUri("https://fm-foodpicturebucket.s3.ap-northeast-2.amazonaws.com/foods/"+UserId+"/"+food.getName());
+        food.setUri(
+                String.format("https://fm-foodpicturebucket.s3.ap-northeast-2.amazonaws.com/foods/%d/%s", UserId, food.getName() +".jpg")
+    );
         try {
             food.setId(dbRepository.queryForObject(String.format("SELECT ID FROM Food WHERE Name=\"%s\"", food.getName()), Integer.class));
         }catch (Exception ignored){

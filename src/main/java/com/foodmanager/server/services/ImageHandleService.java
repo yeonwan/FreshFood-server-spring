@@ -1,5 +1,6 @@
 package com.foodmanager.server.services;
 
+import com.foodmanager.server.repository.DBRepository;
 import com.foodmanager.server.repository.S3Repository;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -18,6 +19,8 @@ public class ImageHandleService {
     private Logger logger = LoggerFactory.getLogger(ImageHandleService.class);
     @Autowired
     private S3Repository s3Repository;
+    @Autowired
+    private DBRepository dbRepository;
 
     public ResponseEntity<?> uploadImageToS3(long UserId, MultipartFile image, String folder, String uploadFileName) throws IOException {
         logger.info(uploadFileName);
