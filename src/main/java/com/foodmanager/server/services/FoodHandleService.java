@@ -52,7 +52,7 @@ public class FoodHandleService {
     }
 
     private int findFoodId(String fName){
-        String sql = String.format("SELECT Name FROM Food WHERE ID = \"%s\"", fName);
+        String sql = String.format("SELECT Name FROM Food WHERE Name = \"%s\"", fName);
         return dbRepository.queryForObject(sql, Integer.class);
     }
 
