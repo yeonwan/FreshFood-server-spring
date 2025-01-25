@@ -1,6 +1,6 @@
-# FreshFood-server-spring
+# FoodRecommender
 
-**FreshFood-server-spring** is a Java-based Spring application designed to recommend recipes based on the ingredients you have. The project leverages data from over 10,000 recipes, with recipe recommendations powered by Elasticsearch.
+**FoodRecommender** is a Java-based Spring application designed to recommend recipes based on the ingredients you have. The project leverages data from over 10,000 recipes, with recipe recommendations powered by Elasticsearch.
 
 ---
 
@@ -16,7 +16,7 @@
 ---
 
 ## Introduction
-The **FreshFood-server-spring** project allows users to input ingredients they have at hand and receive personalized recipe recommendations. By utilizing Elasticsearch for efficient data retrieval and search capabilities, the application provides highly relevant suggestions from a database of over 10,000 recipes. This project is ideal for anyone looking to reduce food waste and get creative with their cooking.
+The **FoodRecommender** project allows users to input ingredients they have at hand and receive personalized recipe recommendations. By utilizing Elasticsearch for efficient data retrieval and search capabilities, the application provides highly relevant suggestions from a database of over 10,000 recipes. This project is ideal for anyone looking to reduce food waste and get creative with their cooking.
 
 ---
 
@@ -41,7 +41,7 @@ The **FreshFood-server-spring** project allows users to input ingredients they h
 
 ## File Structure
 ```
-FreshFood-server-spring/
+FoodRecommender/
 ├── .gitignore             # Git configuration
 ├── .travis.yml            # Travis CI configuration
 ├── Dockerfile             # Docker setup
@@ -68,8 +68,8 @@ FreshFood-server-spring/
 ### Steps
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/yeonwan/FreshFood-server-spring.git
-   cd FreshFood-server-spring
+   git clone https://github.com/yeonwan/FoodRecommender.git
+   cd FoodRecommender
    ```
 
 2. **Set up Elasticsearch**:
